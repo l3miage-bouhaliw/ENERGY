@@ -1,0 +1,5 @@
+machine_id,set_up_time,set_up_energy,tear_down_time,tear_down_energy,min_consumption,end_time
+0,5,7,6,6,2,247
+1,18,7,7,8,1,312
+2,15,9,4,4,3,247
+3,17,8,8,7,1,269
