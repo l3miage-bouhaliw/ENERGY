@@ -4,39 +4,35 @@
 
 ### 📌 Variables de décision
 - **Affectation des opérations**  
-  ```
-  x_{j,o,m} = { 1  si l'opération o du job j est effectuée sur la machine m
-               { 0  sinon
-  ```
+  $$x_{j,o,m} = \begin{cases}  
+  1 & \text{si l'opération } o \text{ du job } j \text{ est effectuée sur la machine } m \\  
+  0 & \text{sinon}  
+  \end{cases}$$
 
 - **Début d'exécution de chaque opération**  
-  `S_{j,o}` : heure de début de l'opération `o` du job `j`.
+  $$S_{j,o} \text{ : heure de début de l'opération } o \text{ du job } j$$
 
 - **Statut d'allumage des machines**  
-  ```
-  Y_{m,t} = { 1  si la machine m est allumée à l'instant t
-            { 0  sinon
-  ```
+  $$Y_{m,t} = \begin{cases}  
+  1 & \text{si la machine } m \text{ est allumée à l'instant } t \\  
+  0 & \text{sinon}  
+  \end{cases}$$
 
 - **Heures de démarrage et d'arrêt des machines**  
-  - `start_{m,k}` : heure de démarrage du `k`-ème allumage de la machine `m`.  
-  - `stop_{m,k}` : heure d'arrêt du `k`-ème allumage de la machine `m`.
+  - $$start_{m,k} \text{ : heure de démarrage du } k\text{-ème allumage de la machine } m$$  
+  - $$stop_{m,k} \text{ : heure d'arrêt du } k\text{-ème allumage de la machine } m$$
 
 ---
 
 ### 📌 Contraintes
 
 ✅ **Séquence d'opérations (ordre interne des jobs)**  
-Pour chaque job `j` :  
-```
-S_{j,o+1} ≥ S_{j,o} + Σ_{m} x_{j,o,m} · processing_time_{j,o,m}
-```
+Pour chaque job $j$ :  
+$$S_{j,o+1} \geq S_{j,o} + \sum_{m} x_{j,o,m} \cdot processing\_time_{j,o,m}$$
 
 ✅ **Affectation unique**  
 Chaque opération doit être affectée à exactement une machine :  
-```
-Σ_{m} x_{j,o,m} = 1
-```
+$$\sum_{m} x_{j,o,m} = 1$$
 
 ✅ **Pas de chevauchement**  
 Une machine ne peut pas exécuter plusieurs opérations en même temps.  
@@ -47,7 +43,7 @@ Lorsqu'une machine est allumée, on ajoute le temps de démarrage et le coût é
 De même pour l'extinction.
 
 ✅ **Durée maximale des machines**  
-Le planning global de chaque machine ne doit pas dépasser la durée maximale fixée `end_time`.
+Le planning global de chaque machine ne doit pas dépasser la durée maximale fixée $end\_time$.
 
 ---
 
@@ -68,27 +64,20 @@ Le planning global de chaque machine ne doit pas dépasser la durée maximale fi
 L'entreprise souhaite équilibrer la consommation d'énergie et la durée totale du planning.
 
 👉 **Forme proposée (fonction objectif multi-critère)** :  
-```
-Z = α × E_total + β × C_max
-```
+$$Z = \alpha \times E_{total} + \beta \times C_{max}$$
 
 Où :
-- `E_total` = consommation d'énergie totale :  
-  ```
-  Σ_{m} (Σ_{k} (set_up_energy_{m} + tear_down_energy_{m}) + ∫_{t} min_consumption_{m} · Y_{m,t} dt) 
-  + Σ_{j,o,m} x_{j,o,m} · energy_consumption_{j,o,m}
-  ```
+- $E_{total}$ = consommation d'énergie totale :  
+$$\sum_{m} \left( \sum_{k} (set\_up\_energy_{m} + tear\_down\_energy_{m}) + \int_{t} min\_consumption_{m} \cdot Y_{m,t} \, dt \right) + \sum_{j,o,m} x_{j,o,m} \cdot energy\_consumption_{j,o,m}$$
 
-- `C_max` = durée totale du planning (makespan) :  
-  ```
-  C_max = max_{j} (S_{j,last} + processing_time_{j,last})
-  ```
+- $C_{max}$ = durée totale du planning (makespan) :  
+$$C_{max} = \max_{j} \left( S_{j,last} + processing\_time_{j,last} \right)$$
 
-- `α, β` = coefficients de pondération fixés selon la priorité donnée à la consommation ou à la durée.
+- $\alpha, \beta$ = coefficients de pondération fixés selon la priorité donnée à la consommation ou à la durée.
 
 💡 **Remarque** :  
-- Si l'entreprise privilégie l'énergie → `α > β`  
-- Si elle privilégie la rapidité → `β > α`
+- Si l'entreprise privilégie l'énergie → $\alpha > \beta$  
+- Si elle privilégie la rapidité → $\beta > \alpha$
 
 ---
 
@@ -96,9 +85,9 @@ Où :
 
 | Élément                     | Description                                                                                                                                                    |
 |-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Variables de décision       | `x_{j,o,m}`, `S_{j,o}`, `Y_{m,t}`, `start_{m,k}`, `stop_{m,k}`                                                                            |
+| Variables de décision       | $x_{j,o,m}$, $S_{j,o}$, $Y_{m,t}$, $start_{m,k}$, $stop_{m,k}$                                                                            |
 | Contraintes                 | Séquence des opérations, affectation unique, pas de chevauchement, gestion allumage/extinction, durée max                                                     |
 | Objectifs                   | Consommation d'énergie + durée totale (makespan)                                                                                                              |
-| Fonction objectif proposée  | **Z = α × E_total + β × C_max**                                                                                 |
+| Fonction objectif proposée  | $$\boxed{Z = \alpha \times E_{total} + \beta \times C_{max}}$$                                                                                                 |
 
 ---
