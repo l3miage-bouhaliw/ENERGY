@@ -146,4 +146,41 @@ Une instance est généralement infaisable quand :
 Σ_i (temps_minimum_tâche_i) + temps_démarrage_arrêt > T_max
 ```
 
-Ou quand il existe des goulots d'étranglement dans l'affectation des opérations aux machines disponibles.
+# Algorithmes de construction de solutions
+
+## 1. Algorithme glouton déterministe (classe Greedy)
+
+**Principe :**  
+Pour chaque opération à faire (dans tous les jobs), on regarde toutes les machines possibles.  
+On choisit directement la machine qui coûte le moins pour cette opération, et on attribue l’opération à cette machine.  
+Une fois fait, on ne revient jamais en arrière pour changer cette décision.
+
+**Pourquoi c’est glouton ?**  
+Parce qu’à chaque étape, on prend la décision la plus avantageuse localement (la moins coûteuse maintenant) sans penser aux conséquences futures.  
+On espère que faire le meilleur choix à chaque étape donnera une bonne solution globale.
+
+---
+
+## 2. Algorithme non-déterministe (classe NonDeterminist)
+
+**Principe :**  
+Pour chaque opération, on regarde aussi toutes les machines possibles.  
+Mais au lieu de choisir la meilleure machine, on choisit au hasard parmi les machines disponibles.
+
+**Conséquence :**  
+À chaque fois qu’on lance cet algorithme sur la même instance, on peut obtenir une solution différente, parce que le choix est aléatoire.
+
+---
+
+## Complexité des deux algorithmes
+
+Pour les deux, on doit parcourir toutes les opérations de tous les jobs, et pour chaque opération, on regarde toutes les machines.
+
+Si :  
+- **m** = nombre de machines  
+- **j** = nombre de jobs  
+- **o** = nombre d’opérations par job
+
+Alors la complexité est environ **O(m × j × o)**, c’est-à-dire qu’elle dépend du produit de ces trois nombres.
+
+C’est une complexité **polynomiale**, ce qui signifie que le temps de calcul reste raisonnable pour des tailles moyennes de problème.
