@@ -78,19 +78,27 @@ class TestSolution(unittest.TestCase):
         plt = sol.gantt('tab20')
         plt.savefig(TEST_FOLDER + os.path.sep +  'temp.png')
 
-        def test_objective(self):
-            '''
-            Test your objective function
-            '''
-            pass
+        def objective(self):
+            """
+            Calcul et retourne la valeur de la fonction objectif pour la solution actuelle.
+            Exemple classique : makespan (fin maximale des opérations) ou somme des coûts.
+            À adapter selon le critère d'optimisation de ton problème.
+            """
+            # Exemple : makespan = temps de fin max parmi toutes les opérations assignées
+            if not all(op.assigned for op in self.all_operations):
+                return None  # ou raise Exception("Solution incomplète")
+            return max(op.end_time for op in self.all_operations)
 
-        def test_evaluate(self):
-            '''
-            Test your evaluate function
-            '''
-            pass
+    def evaluate(self):
+        """
+        Évalue la solution : calcule la fonction objectif et valide la faisabilité.
+        Met à jour éventuellement un indicateur is_feasible.
+        """
+        # Vérifie que toutes les opérations sont assignées
+        self._is_feasible = all(op.assigned for op in self.all_operations)
+        if not self._is_feasible:
+            return None
 
-
-if __name__ == "__main__":
-    # import sys;sys.argv = ['', 'Test.testName']
-    unittest.main()
+        # Calcule l'objectif
+        obj = self.objective()
+        return obj
